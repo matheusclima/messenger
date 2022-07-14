@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+    max-width: 1600px;
+}
+
+.header {
+    border: 1px solid black;
+    padding-left: 15px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: 82.5vh;
+}
+
+.chat-list {
+    border: 1px solid black;
+    padding-left: 15px;
+}
+
+.chat-list__messages {
+    border: 1px solid black;
+    padding-left: 15px;
+}
+
+.footer {
+    border: 1px solid black;
+    padding-left: 15px;
+}
+
