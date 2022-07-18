@@ -1,26 +1,30 @@
+:root {
+    --header-height: 8vh;
+    --footer-height: 10vh;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: auto;
-    max-width: 1600px;
+    max-width: 960px;
 }
 
 .header {
+    display: flex;
+    align-items: center;
     border: 1px solid black;
+    height: var(--header-height);
+    font-size: 1rem;
     padding-left: 15px;
 }
 
 main {
     display: grid;
-    grid-template-columns: 300px 1fr;
-    height: 82.5vh;
-}
-
-.chat-list {
-    border: 1px solid black;
-    padding-left: 15px;
+    grid-template-columns: 30% 1fr;
+    height: calc(100vh - var(--header-height) - var(--footer-height));
 }
 
 .chat-list__messages {
@@ -29,6 +33,10 @@ main {
 }
 
 .footer {
+    display: flex;
+    align-items: center;
+    height: var(--footer-height);
+    font-size: 1rem;
     border: 1px solid black;
     padding-left: 15px;
 }
