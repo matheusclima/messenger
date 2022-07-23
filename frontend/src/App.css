@@ -1,6 +1,6 @@
 :root {
     --header-height: 8vh;
-    --footer-height: 10vh;
+    --footer-height: 8vh;
 }
 
 * {
@@ -9,7 +9,7 @@
 
 body {
     margin: auto;
-    max-width: 960px;
+    max-width: 1200px;
 }
 
 .header {
@@ -25,11 +25,6 @@ main {
     display: grid;
     grid-template-columns: 30% 1fr;
     height: calc(100vh - var(--header-height) - var(--footer-height));
-}
-
-.chat-list__messages {
-    border: 1px solid black;
-    padding-left: 15px;
 }
 
 .footer {

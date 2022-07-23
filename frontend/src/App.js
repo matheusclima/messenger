@@ -1,5 +1,6 @@
 import "./App.css";
 import ChatList from "./components/ChatList"
+import MessageViewer from "./components/MessageViewer"
 import {useState} from "react"
 
 function App() {
@@ -34,10 +35,7 @@ function App() {
       <main>
 
         <ChatList chatList = {chatList} changeActiveChatId = {changeActiveChatId}/>
-        
-        <div className="chat-list__messages">
-          <h1>Conversa {activeChatId}</h1>
-        </div>
+        <MessageViewer activeChatId = {activeChatId}/>
      
       </main>
 
