@@ -55,7 +55,7 @@
 .msg {
     display: flex;
     width: 100%;
-    margin-bottom: 5px;   
+    margin-bottom: 2px;   
 }
 
 .msg-sender {
@@ -71,17 +71,21 @@
     display: flex;
     width: fit-content;
     max-width: 300px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .msg-sender__ballon {
-    border-radius: 10px 0 10px 10px;
-    padding: 10px 0 10px 10px;
-    box-shadow: 3px 3px 8px skyblue;
-    border-radius: 10px 0 10px 10px;
     background-color: var(--sender-ballon-bgcolor);
+    box-shadow: 3px 3px 8px skyblue;
 }
 
-.msg-sender__ballon::after {
+.msg-sender__ballon[arrow="true"] {
+    border-top-right-radius: 0;
+    padding-right: 0;
+}
+
+.msg-sender__ballon[arrow="true"]::after {
     content: "";
     position: relative;
     top: -10px;
@@ -90,19 +94,21 @@
     height: 0;
     border-top: 10px solid var(--sender-ballon-bgcolor);
     border-right: 10px solid transparent;
-    border-bottom: 10px solid none;
+    border-bottom: 10px solid transparent;
     border-left: 10px solid none;
 }
 
 .msg-reciever__ballon {
-    border-radius: 0 10px 10px;
-    padding: 10px 10px 10px 0;
-    margin-bottom: 10px;
     box-shadow: -3px 3px 8px skyblue;
     background-color: var(--reciever-ballon-bgcolor);
 }
 
-.msg-reciever__ballon::before {
+.msg-reciever__ballon[arrow="true"] {
+    border-top-left-radius: 0;
+    padding-left: 0;
+}
+
+.msg-reciever__ballon[arrow="true"]::before {
     content: "";
     position: relative;
     top: -10px;

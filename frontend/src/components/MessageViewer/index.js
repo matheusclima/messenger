@@ -47,7 +47,13 @@ function MessageViewer({ activeChatId }) {
           text: "Gabriel",
           time: "10:31 AM",
           type: "reciever",
-        }
+        },
+        {
+          id: 6,
+          text: "Gabriel",
+          time: "10:31 AM",
+          type: "reciever",
+        },
       ],
     },
     {
@@ -73,48 +79,52 @@ function MessageViewer({ activeChatId }) {
     return chat.id == activeChatId;
   })[0];
 
+  let checkType = ""
+
+  const drawMessage = (message, arrow) => {
+    return (
+      <div className={`msg msg-${message.type}`} key={message.id}>
+        <div className={`ballon msg-${message.type}__ballon`}  arrow={arrow ? "true":"false"}>
+          <span>{message.text}</span>
+        </div>
+      </div>
+    );
+  };
+  
   const sendMessage = (event) => {
-    let input = document.getElementsByClassName("text-input")[0]
-    let newId = messageList.chat[messageList.chat.length - 1].id + 1
-    if(event.key === "Enter") {
+    let input = document.getElementsByClassName("text-input")[0];
+    let newId = messageList.chat[messageList.chat.length - 1].id + 1;
+    if (event.key === "Enter") {
       messageList.chat.push({
         id: newId,
-        text: input.nodeValue,
-        type: "sender"
-      })
+        text: input.value,
+        type: "sender",
+      });
     }
-  }
+  };
+
 
   return (
     <div className="main-screen">
-
       <div className="chat-list__messages">
-        {messageList?.chat?.map((msg) => {
-          if (msg.type == "sender")
-            return (
-              <div className="msg msg-sender" key={msg.id}>
-                <div className="ballon msg-sender__ballon">
-                  <span>{msg.text}</span>
-                </div>
-              </div>
-            );
-          return (
-            <div className="msg msg-reciever">
-              <div className="ballon msg-reciever__ballon" key={msg.id}>
-                <span>{msg.text}</span>
-              </div>
-            </div>
-          );
+        {messageList?.chat?.map((message) => {
+          let arrow = true
+          if(checkType === message.type) arrow = false
+          checkType = message.type
+          return drawMessage(message, arrow)
         })}
       </div>
 
       <div className="input">
-        <input type="text" 
-        className="text-input"
-        placeholder="Text your message..." 
-        onKeyDown={(e) => {sendMessage(e)}}/>
+        <input
+          type="text"
+          className="text-input"
+          placeholder="Text your message..."
+          onKeyDown={(e) => {
+            sendMessage(e);
+          }}
+        />
       </div>
-
     </div>
   );
 }
