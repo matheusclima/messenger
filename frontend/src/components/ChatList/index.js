@@ -1,23 +1,27 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import placeholder from "../../img/placeholder.jpeg"
 import "./style.css"
+import fetchChatList from "../../services/api"
 
 
-function ChatList({chatList, changeActiveChatId}) {
-
-    // Hook para setar o atributo active como true do primeiro chat da lista
-    // que será o chat default a ser mostrado.
-    // Futuramente será substituído por um método que obterá a lista de chat
-    // através de uma requisação na API 
+function ChatList({changeActiveChatId, userId}) {
+    const [chatList, setChatList] = useState([])
+    
+    useEffect(() => {
+        fetchChatList(userId).then((data) => {
+            setChatList(data)
+        })
+    }, [])
+    
     useEffect(() => {
         let chatItemList = [...document.querySelectorAll(".chat-list__item")]
-        changeActiveChatId(chatItemList[0].id)
-        chatItemList[0].setAttribute("active", "true")
-    }, [])
+        changeActiveChatId(chatItemList[0]?.id)
+        chatItemList[0]?.setAttribute("active", "true")
+    }, [chatList])
 
     // Método para setar o atributo active do elemento selecionado pelo usuário
     // através de um click como true
-    const selectChat = (event) => {
+    const selectActiveChat = (event) => {
         let chatItemList = [...document.querySelectorAll(".chat-list__item")]
         chatItemList.map(item => {
             if(item.id === event.id) {
@@ -27,18 +31,17 @@ function ChatList({chatList, changeActiveChatId}) {
                 return item.setAttribute("active", "false")
         })
     }
-
+    
     return <div className="chat-list">
         {chatList?.map((chat) => {
-            let id = chatList.indexOf(chat)
             return <div 
             className="chat-list__item"
-            id = {id} 
+            id = {chat.id} 
             active="false"
-            onClick={(e) => selectChat(e.target)} 
+            onClick={(e) => selectActiveChat(e.target)} 
             key={chatList.indexOf(chat)}>
-                <img className="item--image" src={placeholder} id={id}/> 
-                {chat}
+                <img className="item--image" src={placeholder} id={chat.contact.id}/> 
+                {chat.contact.username}
             </div>
         })}
     </div>

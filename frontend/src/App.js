@@ -5,27 +5,14 @@ import {useState} from "react"
 
 function App() {
 
-  let [activeChatId, setActiveChatId] = useState("")
+  let [activeChatId, setActiveChatId] = useState(null)
+  let userId = "15e26fbf-2a2f-4e77-80dd-acbb5cfa6e35"
   
   const changeActiveChatId = (newActiveChatId) => {
     setActiveChatId(newActiveChatId)
   }
-
-  let chatList = [
-    "Matheus", 
-    "Gabriel", 
-    "Guilherme", 
-    "Bertim",
-    "Carlim",
-    "Toy",
-    "Guto",
-    "Carol",
-    "Ligia",
-    "Bianca",
-    "Thais",
-    "Paulo"
-  ]
-
+  
+  
   return (
     <div className="App">
       <header className="header">
@@ -34,8 +21,8 @@ function App() {
 
       <main>
 
-        <ChatList chatList = {chatList} changeActiveChatId = {changeActiveChatId}/>
-        <MessageViewer activeChatId = {activeChatId}/>
+        <ChatList changeActiveChatId = {changeActiveChatId} userId = {userId}/>
+        <MessageViewer activeChatId = {activeChatId} userId = {userId}/>
      
       </main>
 
