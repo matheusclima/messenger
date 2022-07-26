@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fetchChatMessages from "../../services/messages"
-import saveMessage from "../../services/postMsg"
+import api from "../../services/api"
 import "./style.css";
 
 function MessageViewer({ activeChatId, userId }) {
@@ -9,13 +8,11 @@ function MessageViewer({ activeChatId, userId }) {
   
   useEffect(() => {
     if(activeChatId) 
-      fetchChatMessages(activeChatId).then(data => {
+      api.getChatMessages(activeChatId).then(data => {
         setMessageList(data)
       })
     
   }, [activeChatId])
-
-  let messageBlockType = ""
 
   const drawMessage = (message, type, arrow) => {
     return (
@@ -29,28 +26,39 @@ function MessageViewer({ activeChatId, userId }) {
   
   const sendMessage = (event) => {
     let input = document.getElementsByClassName("text-input")[0];
+    
+    if( input.value === "") return
+    
     if (event.key === "Enter") {
       let message = {
         content: input.value,
         chat_id: activeChatId,
         sender_id: userId
       }
+      api.postMessage(message) 
       setMessageList([message, ...messageList])
-      saveMessage(message)
       input.value = ""
     }
   };
+
+  const checkIfSender = (message, userId) => {
+    if(message.sender_id === userId) return true
+    return false
+  } 
+
+  const checkIfDrawArrow = (message, nextMessage) => {
+    if( !nextMessage ) return true
+    if( message.sender_id !== nextMessage.sender_id ) return true
+    return false
+  }
 
   return (
     <div className="main-screen">
       <div className="chat-list__messages">
         {messageList?.map((message, index) => {
-          // Refatorar
-          let messageType = "reciever"
           let nextMessage = messageList?.[index + 1]
-          let drawArrow = false
-          if(userId === message.sender_id) messageType = "sender"
-          if( !nextMessage || message.sender_id !== nextMessage.sender_id) drawArrow = true
+          let messageType = checkIfSender(message, userId) ? "sender" : "reciever"
+          let drawArrow = checkIfDrawArrow(message, nextMessage)
           return drawMessage(message, messageType, drawArrow)
         })}
       </div>

@@ -1,14 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from "react"
 import placeholder from "../../img/placeholder.jpeg"
 import "./style.css"
-import fetchChatList from "../../services/api"
+import api from "../../services/api"
 
 
 function ChatList({changeActiveChatId, userId}) {
     const [chatList, setChatList] = useState([])
     
     useEffect(() => {
-        fetchChatList(userId).then((data) => {
+        api.getChatList(userId).then((data) => {
             setChatList(data)
         })
     }, [])

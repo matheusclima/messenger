@@ -20,4 +20,28 @@ const fetchChatList = async (userId) => {
   return response.data;
 };
 
-export default fetchChatList
+const fetchChatMessages = async (chatId) => {
+  const response = await api.get(`/${chatId}/messages`)
+  return response.data 
+}
+
+const saveMessage = (message) => {
+  api.post("/messages", message).then(response => {
+      console.log(response)
+  })
+}
+
+export default {
+  
+  getChatList: async (userId) => {
+    return await fetchChatList(userId)
+  },
+  
+  getChatMessages: async (chatId) => {
+    return await fetchChatMessages(chatId)
+  },
+
+  postMessage: (message) => {
+    return saveMessage(message)
+  }
+}
