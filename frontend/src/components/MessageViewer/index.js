@@ -4,14 +4,14 @@ import "./style.css";
 
 function MessageViewer({ activeChatId, userId }) {
 
+  const [value, setValue] = useState("")
   const [messageList, setMessageList] = useState([])
   
-  useEffect(() => {
-    if(activeChatId) 
+  useEffect(() => { 
+    if(activeChatId)
       api.getChatMessages(activeChatId).then(data => {
         setMessageList(data)
-      })
-    
+      })    
   }, [activeChatId])
 
   const drawMessage = (message, type, arrow) => {
@@ -25,20 +25,20 @@ function MessageViewer({ activeChatId, userId }) {
   };
   
   const sendMessage = (event) => {
-    let input = document.getElementsByClassName("text-input")[0];
-    
-    if( input.value === "") return
-    
-    if (event.key === "Enter") {
-      let message = {
-        content: input.value,
-        chat_id: activeChatId,
-        sender_id: userId
-      }
-      api.postMessage(message) 
-      setMessageList([message, ...messageList])
-      input.value = ""
+    event.preventDefault()
+
+    if( value === "") return
+  
+    let message = {
+      content: value,
+      chat_id: activeChatId,
+      sender_id: userId
     }
+    api.postMessage(message)
+    setMessageList([message, ...messageList])
+    document.querySelector(".text-input").value = ""
+    setValue("")
+
   };
 
   const checkIfSender = (message, userId) => {
@@ -63,16 +63,17 @@ function MessageViewer({ activeChatId, userId }) {
         })}
       </div>
 
-      <div className="input">
+      <form className="input" onSubmit={sendMessage}>
         <input
           type="text"
           className="text-input"
           placeholder="Text your message..."
-          onKeyDown={(e) => {
-            sendMessage(e);
+          onChange={(e) => {
+            setValue(e.target.value);
+            console.log(value)
           }}
         />
-      </div>
+      </form>
     </div>
   );
 }
