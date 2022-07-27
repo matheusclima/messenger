@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import placeholder from "../../img/placeholder.jpeg"
 import "./style.css"
 import api from "../../services/api"
@@ -19,8 +19,6 @@ function ChatList({changeActiveChatId, userId}) {
         chatItemList[0]?.setAttribute("active", "true")
     }, [chatList])
 
-    // Método para setar o atributo active do elemento selecionado pelo usuário
-    // através de um click como true
     const selectActiveChat = (event) => {
         let chatItemList = [...document.querySelectorAll(".chat-list__item")]
         chatItemList.map(item => {

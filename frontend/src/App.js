@@ -5,13 +5,12 @@ import {useState} from "react"
 
 function App() {
 
-  let [activeChatId, setActiveChatId] = useState(null)
+  const [activeChatId, setActiveChatId] = useState(null)
   let userId = "15e26fbf-2a2f-4e77-80dd-acbb5cfa6e35"
-  
+
   const changeActiveChatId = (newActiveChatId) => {
     setActiveChatId(newActiveChatId)
   }
-  
   
   return (
     <div className="App">

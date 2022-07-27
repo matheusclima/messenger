@@ -23,7 +23,7 @@ body {
 
 main {
     display: grid;
-    grid-template-columns: 30% 1fr;
+    grid-template-columns: 35% 1fr;
     height: calc(100vh - var(--header-height) - var(--footer-height));
 }
 

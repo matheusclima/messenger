@@ -1,19 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 :root {
     --sender-ballon-bgcolor: #FFFFFF;
     --reciever-ballon-bgcolor: #FFFFFF;
+    --v-padding-ballon: 5px;
+    --h-padding-ballon: 10px;
 }
 
 .main-screen {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
+    font-family: 'Roboto', sans-serif;
 }
 
 .chat-list__messages {
     display: flex;
     flex-direction: column-reverse;
     height: 92%;
-    padding: 15px;
+    padding: 0 80px 20px;
     background: radial-gradient(circle, rgba(37,101,174,1) 0%, rgba(255, 255, 255, 1) 500%);
     overflow-y: scroll; 
 }
@@ -55,7 +60,7 @@
 .msg {
     display: flex;
     width: 100%;
-    margin-bottom: 2px;   
+    margin-bottom: 5px;   
 }
 
 .msg-sender {
@@ -67,12 +72,12 @@
 }
 
 .ballon {
-    font-family: Georgia, 'Times New Roman', Times, serif;
     display: flex;
     width: fit-content;
     max-width: 300px;
+    font-size: .9rem;
     border-radius: 10px;
-    padding: 10px;
+    padding: var(--v-padding-ballon) var(--h-padding-ballon);
 }
 
 .msg-sender__ballon {
@@ -88,7 +93,7 @@
 .msg-sender__ballon[arrow="true"]::after {
     content: "";
     position: relative;
-    top: -10px;
+    top: calc(var(--v-padding-ballon) * -1);
     right: -10px;
     width: 0;
     height: 0;
@@ -111,8 +116,8 @@
 .msg-reciever__ballon[arrow="true"]::before {
     content: "";
     position: relative;
-    top: -10px;
-    left: -10px;
+    top: calc(var(--v-padding-ballon) * -1);
+    left: calc(var(--h-padding-ballon) * -1);
     width: 0;
     height: 0;
     border-top: 10px solid var(--reciever-ballon-bgcolor);
