@@ -25,10 +25,9 @@ const fetchChatMessages = async (chatId) => {
   return response.data 
 }
 
-const saveMessage = (message) => {
-  api.post("/messages", message).then(response => {
-      console.log(response)
-  })
+const saveMessage = async (message) => {
+  const response = await api.post("/messages", message)
+  return response.data
 }
 
 export default {
@@ -41,7 +40,7 @@ export default {
     return await fetchChatMessages(chatId)
   },
 
-  postMessage: (message) => {
-    return saveMessage(message)
+  postMessage: async (message) => {
+    return await saveMessage(message)
   }
 }

@@ -11,14 +11,18 @@ function MessageViewer({ activeChatId, userId }) {
     if(activeChatId)
       api.getChatMessages(activeChatId).then(data => {
         setMessageList(data)
-      })    
+      })
+      console.log(messageList)
   }, [activeChatId])
 
   const drawMessage = (message, type, arrow) => {
+    let date = message.created_at
+    let formattedTime = date.split("T")[1].substring(0, 5)
     return (
       <div className={`msg msg-${type}`} key={message.id}>
         <div className={`ballon msg-${type}__ballon`}  arrow={arrow ? "true":"false"}>
-          <span>{message.content}</span>
+          <span className="content">{message.content}</span>
+          <span className="time">{formattedTime}</span>
         </div>
       </div>
     );
@@ -29,15 +33,18 @@ function MessageViewer({ activeChatId, userId }) {
 
     if( value === "") return
   
-    let message = {
+    let newMessage = {
       content: value,
       chat_id: activeChatId,
       sender_id: userId
     }
-    api.postMessage(message)
-    setMessageList([message, ...messageList])
-    document.querySelector(".text-input").value = ""
-    setValue("")
+
+    api.postMessage(newMessage).then(savedMessageData => {
+      console.log(savedMessageData)
+      setMessageList([savedMessageData, ...messageList])
+      document.querySelector(".text-input").value = ""
+      setValue("")
+    })
 
   };
 
