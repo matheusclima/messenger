@@ -1,83 +1,109 @@
 import React, { useEffect, useState } from "react";
-import api from "../../services/api"
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import api from "../../services/api";
 import "./style.css";
 
-function MessageViewer({ activeChatId, userId }) {
 
-  const [value, setValue] = useState("")
-  const [messageList, setMessageList] = useState([])
+function MessageViewer({ activeChatId, userId }) {
+  const [value, setValue] = useState("");
+  const [messageList, setMessageList] = useState([]);
   
-  useEffect(() => { 
-    if(activeChatId)
-      api.getChatMessages(activeChatId).then(data => {
-        setMessageList(data)
+  const {sendMessage, lastMessage, readyState} = useWebSocket("ws://192.168.0.183:8080/messages/ws", {
+    onOpen: () => console.log("[Socket] => Connection opened"),
+    //Usar isso ou useEffect???
+    onMessage: (payload) => {
+      let newMessage = JSON.parse(payload.data) 
+      if(activeChatId === newMessage.chat_id)
+        setMessageList(prevMessageList => [newMessage, ...prevMessageList])
+    },
+
+    shouldReconnect: (CloseEvent) => true,
+    onClose: () => console.log("[Socket] => Connection closed")
+  })
+
+  useEffect(() => {
+    console.log(`[GET] => Chat message from activeChatId: ${activeChatId}`)
+    if (activeChatId)
+      api.getChatMessages(activeChatId)
+      .then((data) => {
+        setMessageList(data);
       })
-      console.log(messageList)
-  }, [activeChatId])
+  }, [activeChatId]);
+
+  // Usar ou não useEffect???
+  // useEffect(() => {
+  //   console.log("Render socket")
+  //   if(lastMessage){
+  //     let newMessage = JSON.parse(lastMessage.data)
+  //     if(activeChatId === newMessage.chat_id) 
+  //       setMessageList(prevMessageList => [newMessage, ...prevMessageList])
+  //   }
+  // }, [lastMessage])
 
   const drawMessage = (message, type, arrow) => {
-    let date = message.created_at
-    let formattedTime = date.split("T")[1].substring(0, 5)
+    let date = message.created_at;
+    let formattedTime = date.split("T")[1].substring(0, 5);
     return (
-      <div className={`msg msg-${type}`} key={message.id}>
-        <div className={`ballon msg-${type}__ballon`}  arrow={arrow ? "true":"false"}>
+      <li className={`msg msg-${type}`} key={message.id}>
+        <div
+          className={`ballon msg-${type}__ballon`}
+          arrow={arrow ? "true" : "false"}
+        >
           <span className="content">{message.content}</span>
           <span className="time">{formattedTime}</span>
         </div>
-      </div>
+      </li>
     );
   };
-  
-  const sendMessage = (event) => {
-    event.preventDefault()
 
-    if( value === "") return
+  const submitMessage = (event) => {
+    event.preventDefault();
+
+    if (value.trim()) {
+      let newMessage = {
+        content: value,
+        chat_id: activeChatId,
+        sender_id: userId,
+      };
   
-    let newMessage = {
-      content: value,
-      chat_id: activeChatId,
-      sender_id: userId
+      api.postMessage(newMessage)
+      .then((savedMessageData) => {
+        setMessageList([savedMessageData, ...messageList]);
+        setValue("");
+      });
     }
-
-    api.postMessage(newMessage).then(savedMessageData => {
-      console.log(savedMessageData)
-      setMessageList([savedMessageData, ...messageList])
-      document.querySelector(".text-input").value = ""
-      setValue("")
-    })
-
   };
 
   const checkIfSender = (message, userId) => {
-    if(message.sender_id === userId) return true
-    return false
-  } 
+    if (message.sender_id === userId) return true;
+    return false;
+  };
 
   const checkIfDrawArrow = (message, nextMessage) => {
-    if( !nextMessage ) return true
-    if( message.sender_id !== nextMessage.sender_id ) return true
-    return false
-  }
+    if (!nextMessage) return true;
+    if (message.sender_id !== nextMessage.sender_id) return true;
+    return false;
+  };
 
   return (
     <div className="main-screen">
-      <div className="chat-list__messages">
+      <ul className="chat-list__messages">
         {messageList?.map((message, index) => {
-          let nextMessage = messageList?.[index + 1]
-          let messageType = checkIfSender(message, userId) ? "sender" : "reciever"
-          let drawArrow = checkIfDrawArrow(message, nextMessage)
-          return drawMessage(message, messageType, drawArrow)
+          let nextMessage = messageList?.[index + 1];
+          let messageType = checkIfSender(message, userId) ? "sender" : "reciever";
+          let drawArrow = checkIfDrawArrow(message, nextMessage);
+          return drawMessage(message, messageType, drawArrow);
         })}
-      </div>
+      </ul>
 
-      <form className="input" onSubmit={sendMessage}>
+      <form className="input" onSubmit={submitMessage}>
         <input
           type="text"
           className="text-input"
           placeholder="Text your message..."
+          value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            console.log(value)
           }}
         />
       </form>

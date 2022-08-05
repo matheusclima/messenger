@@ -45,10 +45,14 @@
 }
 
 
-.chat-list__item span:nth-child(2) {
+.chat-list__item div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 5px;
     color: rgba(255, 255, 255, 1);
     font-size: 1.25rem;
+    row-gap: 10px;
 }
 
 .chat-list__item span:nth-child(3) {
@@ -59,10 +63,8 @@
     color: rgba(255, 255, 255, 0.7);
 }
 
-.chat-list__item span:nth-child(4) {
-    position: absolute;
-    bottom: 20%;
-    left: 18%;
+.chat-list__item div span:nth-child(2) {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
+    overflow-x: hidden;
 }
