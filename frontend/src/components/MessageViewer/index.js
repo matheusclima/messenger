@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { SocketContext } from "../../App"
+import SocketContext from "../../context/SocketContext"
 import api from "../../services/api";
 import "./style.css";
 
@@ -7,14 +7,14 @@ import "./style.css";
 function MessageViewer({ activeChatId, userId }) {
   const [value, setValue] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const socketData = useContext(SocketContext)
+  const messageFromSocket = useContext(SocketContext)
 
   useEffect(() => {
-    if(socketData){
-      if(activeChatId === socketData.chat_id)
-        setMessageList(prevMessageList => [socketData, ...prevMessageList])
+    if(messageFromSocket){
+      if(activeChatId === messageFromSocket.chat_id)
+        setMessageList(prevMessageList => [messageFromSocket, ...prevMessageList])
       }
-  }, [socketData])
+  }, [messageFromSocket])
   
   useEffect(() => {
     if (activeChatId)
@@ -45,7 +45,7 @@ function MessageViewer({ activeChatId, userId }) {
 
     if (value.trim()) {
       let newMessage = {
-        content: value,
+        content: value.trim(),
         chat_id: activeChatId,
         sender_id: userId,
       };

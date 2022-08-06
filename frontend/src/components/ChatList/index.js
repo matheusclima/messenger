@@ -1,27 +1,27 @@
 import { useEffect, useState, useContext, useCallback } from "react";
-import { SocketContext } from "../../App";
+import SocketContext from "../../context/SocketContext";
 import placeholder from "../../img/placeholder.jpeg";
 import "./style.css";
 import api from "../../services/api";
 
 function ChatList({ activeChatId, changeActiveChatId, userId }) {
   const [chatList, setChatList] = useState([]);
-  const socketData = useContext(SocketContext);
+  const messageFromSocket = useContext(SocketContext);
 
   useEffect(() => {
-    if (socketData) {
+    if (messageFromSocket) {
       let newChatList = [...chatList];
-      let chat = newChatList.find((chat) => chat.id === socketData.chat_id);
+      let chat = newChatList.find((chat) => chat.id === messageFromSocket.chat_id);
       if (chat) {
-        chat.last_message = socketData.content;
-        chat.last_message_at = socketData.created_at;
+        chat.last_message = messageFromSocket.content;
+        chat.last_message_at = messageFromSocket.created_at;
         newChatList.sort((a, b) =>
           b.last_message_at.localeCompare(a.last_message_at)
         );
       }
       setChatList(newChatList);
     }
-  }, [socketData]);
+  }, [messageFromSocket]);
 
   useEffect(() => {
     api.getChatList(userId).then((data) => {
