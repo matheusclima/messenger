@@ -53,6 +53,17 @@
     color: rgba(255, 255, 255, 1);
     font-size: 1.25rem;
     row-gap: 10px;
+    width: 70%;
+}
+
+.chat-list__item div span:nth-child(2) {
+    text-align: left;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .chat-list__item span:nth-child(3) {
@@ -61,10 +72,4 @@
     margin-top: 5px;
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.7);
-}
-
-.chat-list__item div span:nth-child(2) {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    overflow-x: hidden;
 }

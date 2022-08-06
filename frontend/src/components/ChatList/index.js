@@ -1,20 +1,33 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { SocketContext } from "../../App"
 import placeholder from "../../img/placeholder.jpeg";
 import "./style.css";
 import api from "../../services/api";
 
 function ChatList({ changeActiveChatId, userId }) {
   const [chatList, setChatList] = useState([]);
+  const socket = useContext(SocketContext)
 
   useEffect(() => {
-    console.log(`[GET] => Chat list from userId: ${userId}`)
+    // console.log(`ChatList:`, socket.chat)
+    if(socket.chat) {
+      socket.chat.onmessage = (payload) => {
+        let data = JSON.parse(payload.data)
+        console.log(data)
+      }
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    // console.log(`[GET] => Chat list from userId: ${userId}`)
     api.getChatList(userId).then((data) => {
       setChatList(data);
     });
-  }, []);
+  }, [userId]);
 
+//Vai dar pau!!!!
   useEffect(() => {
-    console.log("[SET] => Initial chat id to activate")
+    // console.log("[SET] => Initial chat id to activate")
     let chatItemList = [...document.querySelectorAll(".chat-list__item")];
     changeActiveChatId(chatItemList[0]?.id);
     chatItemList[0]?.setAttribute("active", "true");
