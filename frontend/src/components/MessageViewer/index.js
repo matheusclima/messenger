@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import {SocketContext } from "../../App"
+import { SocketContext } from "../../App"
 import api from "../../services/api";
 import "./style.css";
 
@@ -8,47 +7,22 @@ import "./style.css";
 function MessageViewer({ activeChatId, userId }) {
   const [value, setValue] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const socket = useContext(SocketContext)
+  const socketData = useContext(SocketContext)
 
   useEffect(() => {
-    // console.log(`MessageViewer:`, socket.message)
-    if(socket.message)
-      socket.message.onmessage = (payload) => {
-        let newMessageFromContact = JSON.parse(payload.data)
-        if(activeChatId === newMessageFromContact.chat_id)
-          setMessageList(prevMessageList => [newMessageFromContact, ...prevMessageList])
+    if(socketData){
+      if(activeChatId === socketData.chat_id)
+        setMessageList(prevMessageList => [socketData, ...prevMessageList])
       }
-  }, [socket])
-  // const {sendMessage, lastMessage, readyState} = useWebSocket(`ws://192.168.0.183:8080/users/${userId}/ws`, {
-  //   onOpen: () => console.log("[Socket] => Connection opened"),
-  //   //Usar isso ou useEffect???
-  //   onMessage: (payload) => {
-  //     let newMessage = JSON.parse(payload.data) 
-  //     if(activeChatId === newMessage.chat_id)
-  //       setMessageList(prevMessageList => [newMessage, ...prevMessageList])
-  //   },
-
-  //   shouldReconnect: (CloseEvent) => true,
-  //   onClose: () => console.log("[Socket] => Connection closed")
-  // })
-
+  }, [socketData])
+  
   useEffect(() => {
-    // console.log(`[GET] => Chat message from activeChatId: ${activeChatId}`)
     if (activeChatId)
       api.getChatMessages(activeChatId)
       .then((data) => {
         setMessageList(data);
       })
   }, [activeChatId]);
-
-  // Usar ou não useEffect???
-  // useEffect(() => {
-  //   if(lastMessage){
-  //     let newMessage = JSON.parse(lastMessage.data)
-  //     if(activeChatId === newMessage.chat_id) 
-  //       setMessageList(prevMessageList => [newMessage, ...prevMessageList])
-  //   }
-  // }, [socket])
 
   const drawMessage = (message, type, arrow) => {
     let date = message.created_at;
@@ -77,8 +51,7 @@ function MessageViewer({ activeChatId, userId }) {
       };
   
       api.postMessage(newMessage)
-      .then((savedMessageData) => {
-        setMessageList([savedMessageData, ...messageList]);
+      .then(() => {
         setValue("");
       });
     }

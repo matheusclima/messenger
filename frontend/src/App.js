@@ -15,9 +15,13 @@ function App() {
   const socket = useWebSocket(`ws://192.168.0.183:8080/users/${userId}/ws`, {
     onOpen: () => console.log("[Socket] => Connection opened"),
     shouldReconnect: (CloseEvent) => true,
+    onMessage: (payload) => {
+      let data = JSON.parse(payload.data)
+      setSocketData(data)
+    },
     onClose: () => console.log("[Socket] => Connection closed")
   })
-  
+
   const changeActiveChatId = (newActiveChatId) => {
     setActiveChatId(newActiveChatId)
   }
@@ -36,11 +40,17 @@ function App() {
       </header>
 
       <main>
-        <SocketContext.Provider value={socket}>
-          <ChatList changeActiveChatId = {changeActiveChatId} userId = {userId}/>
-          <MessageViewer activeChatId = {activeChatId} userId = {userId}/>
+        <SocketContext.Provider value={socketData}>
+          <ChatList 
+          userId = {userId}
+          activeChatId = {activeChatId} 
+          changeActiveChatId = {changeActiveChatId}
+          />
+          <MessageViewer 
+          userId = {userId}
+          activeChatId = {activeChatId}
+          />
         </SocketContext.Provider>
-     
       </main>
 
       <footer className="footer">
