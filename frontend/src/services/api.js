@@ -1,18 +1,22 @@
 import axios from "axios";
 
 const BASE_URL = "http://192.168.0.183:8080";
+const token = localStorage.getItem("token")
 
 const config = {
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  },
+    "Access-Control-Allow-Origin": "*"
+  }
 };
 
 const api = axios.create({
   baseURL: BASE_URL,
-  config: config,
+  config: config
 });
+
+if(token)
+  api.defaults.headers.common["Authorization"] = localStorage.getItem("token")
 
 const fetchChatList = async (userId) => {
   const response = await api.get(`/${userId}/chats`);
