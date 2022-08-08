@@ -1,17 +1,25 @@
-import "./App.css";
-import React, { useState } from "react"
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import React, { useMemo, useState } from "react"
+import useWebSocket from "react-use-websocket";
+import jwt_decode from "jwt-decode"
+import LoginContext from "./context/LoginContext";
 import SocketContext from "./context/SocketContext"
-import ChatList from "./components/ChatList"
-import MessageViewer from "./components/MessageViewer"
-import Routes from "./routes/Routes"
-import { BrowserRouter } from "react-router-dom";
+import Login from "./components/Login"
+import Main from "./Main"
 
 function App() {
 
+  // const [userId, setUserId] = useState("")
   const [activeChatId, setActiveChatId] = useState(null)
-  const [userId, setUserId] = useState("15e26fbf-2a2f-4e77-80dd-acbb5cfa6e35")
   const [messageFromSocket, setMessageFromSocket] = useState({})
+  let token = localStorage.getItem("token")
+
+  const userId = useMemo(() => {
+    if(token) {
+      let decodedToken = jwt_decode(token)
+      return decodedToken.id
+    }
+    return ""
+  }, [token])
 
   const socket = useWebSocket(`ws://192.168.0.183:8080/users/${userId}/ws`, {
     onOpen: () => console.log("[Socket] => Connection opened"),
@@ -26,41 +34,22 @@ function App() {
   const changeActiveChatId = (newActiveChatId) => {
     setActiveChatId(newActiveChatId)
   }
-
-  const changeUserId = () => {
-    let newUserId = userId === "15e26fbf-2a2f-4e77-80dd-acbb5cfa6e35"
-      ? "a898e6e7-b1c5-49f5-b72f-60f21206be21"
-      : "15e26fbf-2a2f-4e77-80dd-acbb5cfa6e35"
-    setUserId(newUserId)
-  }
-
-  return (
-
-    <>
-      <header className="header">
-        Header
-      </header>
-
-      <main>
+  if(token)
+    return (
         <SocketContext.Provider value={messageFromSocket}>
-          <ChatList 
-          userId = {userId}
-          activeChatId = {activeChatId} 
-          changeActiveChatId = {changeActiveChatId}
-          />
-          <MessageViewer 
-          userId = {userId}
-          activeChatId = {activeChatId}
+          <Main
+            userId={userId}
+            activeChatId={activeChatId}
+            changeActiveChatId={changeActiveChatId}
           />
         </SocketContext.Provider>
-      </main>
-
-      <footer className="footer">
-        Footer
-        <button onClick={changeUserId}>Change User</button>
-      </footer>
-    </>
-  );
+    );
+  return (
+    <LoginContext.Provider>
+      <Login/>
+    </LoginContext.Provider>
+  )
+  
 }
 
 export default App;

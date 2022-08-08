@@ -1,5 +1,4 @@
 import axios from "axios";
-//192.168.0.183
 
 const BASE_URL = "http://192.168.0.183:8080";
 
@@ -30,6 +29,11 @@ const saveMessage = async (message) => {
   return response.data
 }
 
+const sendLogin = async (user) => {
+  const response = await api.post("/login", user)
+  return response.data
+}
+
 export default {
   
   getChatList: async (userId) => {
@@ -42,5 +46,9 @@ export default {
 
   postMessage: async (message) => {
     return await saveMessage(message)
+  }, 
+
+  sendLogin: async (user) => {
+    return await sendLogin(user)
   }
 }
