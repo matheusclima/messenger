@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react"
-import LoginContext from "../../context/LoginContext"
 import api from "../../services/api"
 import styles from "./style.module.css"
 
@@ -7,12 +6,12 @@ function Login() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const setUserId = useContext(LoginContext)
 
     const submitLoginInfo = async (event) => {
         event.preventDefault()
         let response = await api.sendLogin({username, password})
         localStorage.setItem("token", response.token)
+        window.location.href = `/`
     }
 
     return (
