@@ -4,6 +4,7 @@ import SocketContext from "../context/SocketContext"
 import ChatList from "../components/ChatList"
 import MessageViewer from "../components/MessageViewer"
 import styles from "./style.module.css"
+import auth from "../services/auth";
 
 function Chat({ userId }) {
     const [activeChatId, setActiveChatId] = useState(null)
@@ -27,8 +28,8 @@ function Chat({ userId }) {
         <SocketContext.Provider value={messageFromSocket}>
             <div className={styles.app}>
                 <header className={styles.header}>
-                    Header
-                    </header>
+                    <button onClick={()=> {auth.logout()}}>Logout</button>
+                </header>
 
                 <main className={styles.main}>
                     <ChatList
@@ -44,7 +45,7 @@ function Chat({ userId }) {
 
                 <footer className={styles.footer}>
                     Footer
-                    </footer>
+                </footer>
             </div>
         </SocketContext.Provider>
     )

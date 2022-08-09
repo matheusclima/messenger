@@ -11,10 +11,34 @@
 .header {
     display: flex;
     align-items: center;
+    justify-content: right;
     border: 1px solid black;
     height: var(--header-height);
     font-size: 1rem;
-    padding-left: 15px;
+    padding: 0 15px;
+    background-color: #2565AE;
+}
+
+.header button {
+    width: 10%;
+    height: 40%;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    background-color: #487EBB;
+    box-shadow: 1px 1px 5px lightskyblue;
+}
+
+.header button:hover {
+    cursor: pointer;
+    opacity: 90%;
+}
+
+.header button:active {
+    cursor: pointer;
+    box-shadow: inset 1px 1px skyblue;
+
 }
 
 .main {
