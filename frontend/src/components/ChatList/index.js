@@ -3,6 +3,7 @@ import SocketContext from "../../context/SocketContext";
 import placeholder from "../../img/placeholder.jpeg";
 import "./style.css";
 import api from "../../services/api";
+import auth from "../../services/auth";
 
 function ChatList({ activeChatId, changeActiveChatId, userId }) {
   const [chatList, setChatList] = useState([]);
@@ -26,7 +27,11 @@ function ChatList({ activeChatId, changeActiveChatId, userId }) {
   useEffect(() => {
     api.getChatList(userId).then((data) => {
       setChatList(data);
-    });
+    })
+    .catch((e) => {
+      alert("Your session has expired")
+      auth.logout()
+    })
   }, [userId]);
 
   useEffect(() => {

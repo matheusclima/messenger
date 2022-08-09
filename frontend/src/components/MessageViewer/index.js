@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import SocketContext from "../../context/SocketContext"
 import api from "../../services/api";
+import auth from "../../services/auth"
 import "./style.css";
 
 
@@ -21,6 +22,10 @@ function MessageViewer({ activeChatId, userId }) {
       api.getChatMessages(activeChatId)
       .then((data) => {
         setMessageList(data);
+      })
+      .catch((e) => {
+        alert("Your session has expired")
+        auth.logout()
       })
   }, [activeChatId]);
 
@@ -53,7 +58,11 @@ function MessageViewer({ activeChatId, userId }) {
       api.postMessage(newMessage)
       .then(() => {
         setValue("");
-      });
+      })
+      .catch(e => {
+        alert("Your session has expired")
+        auth.logout()
+      })
     }
   };
 
