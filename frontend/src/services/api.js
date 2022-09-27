@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://192.168.0.183:8080";
+const BASE_URL = "http://localhost:8080";
 const token = localStorage.getItem("token")
 
 const config = {
@@ -38,6 +38,11 @@ const sendLogin = async (user) => {
   return response.data
 }
 
+const sendSignUp = async (user) => {
+  const response = await api.post("/signup", user)
+  return response.data
+}
+
 export default {
   
   getChatList: async (userId) => {
@@ -54,5 +59,9 @@ export default {
 
   sendLogin: async (user) => {
     return await sendLogin(user)
+  },
+
+  sendSignUp: async (user) => {
+    return await sendSignUp(user)
   }
 }
