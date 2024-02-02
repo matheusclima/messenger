@@ -54,7 +54,7 @@
     align-items: center;
     width: fit-content;
     max-width: 300px;
-    font-size: .9rem;
+    font-size: .8rem;
     border-radius: 10px;
     padding: var(--v-padding-ballon) var(--h-padding-ballon);
     position: relative;
@@ -74,7 +74,7 @@
     content: "";
     position: absolute;
     top: 0;
-    right: -10px;
+    right: -9.5px;
     width: 0;
     height: 0;
     border-top: 10px solid var(--sender-ballon-bgcolor);
@@ -96,7 +96,7 @@
     content: "";
     position: absolute;
     top: 0;
-    left: -10px;
+    left: -9.5px;
     width: 0;
     height: 0;
     border-top: 10px solid var(--reciever-ballon-bgcolor);
